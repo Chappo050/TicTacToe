@@ -1,0 +1,19 @@
+#gameBoardContainer{
+    display: grid;
+    grid-template-columns: 150px 150px 150px;
+    grid-template-rows: 150px 150px 150px;
+    grid-template-areas:
+    'A0 B0 C0'
+    'A1 B1 C1'
+    'A2 B2 C2'
+    ;
+
+
+}
+
+.gameCells{
+    text-align:center;
+    font-size: 100px;
+    border: 3px solid black;
+    padding: 12px 12px 12px 12px;
+}
