@@ -195,7 +195,7 @@ const displayController = (() => {
     function winScreen(currentPlayer) {
         const name = players[currentPlayer].getName();
         const winScreen = document.getElementById("winnerText")
-        winScreen.innerText = `${name}YOU WIN!!!`;
+        winScreen.innerText = `${name} YOU WIN!!!`;
     }
 
     function assignNames() {
