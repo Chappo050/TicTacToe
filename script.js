@@ -2,7 +2,6 @@ const gameBoard = (() => {
     //Functions here
     let xoPos = [];
     let currentPlayer = 0;
-    let players = [];
 
 
     //Changes the style of the text depending on if it is an X or O
@@ -25,6 +24,11 @@ const gameBoard = (() => {
         }
     }
 
+
+    function _checkWin() {
+        
+    }
+    
     function _placeText(event){
         if (currentPlayer === 0) {
             _styleOutput(event);
@@ -41,7 +45,6 @@ const gameBoard = (() => {
     }
 
     function playerClickLogic(event){
-        console.log(players[0]);
         if (_checkCell(event)) {
             event.target.innerText = _placeText(event);
         }
@@ -50,9 +53,8 @@ const gameBoard = (() => {
         }
     }
 
-    function initializeGame(array){
+    function initializeGame(){
         displayController.createGameDivs();
-        players = array;
     }
 
     return {
@@ -109,5 +111,5 @@ const Player = (playerName, playerNum, score, text) => {
 const player1 = Player('Matthew', 0, 0, "X");
 const player2 = Player('Cameron', 1, 0, "O");
 
-gameBoard.initializeGame([player1, player2]);
+gameBoard.initializeGame();
 
