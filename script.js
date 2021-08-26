@@ -7,7 +7,7 @@ const gameBoard = (() => {
 ];
     let currentPlayer = 0;
     let gameOver = false;
-
+    const playerLable = document.getElementById('playerTurn')
 
     //Changes the style of the text depending on if it is an X or O
     function _styleOutput(event){
@@ -19,7 +19,6 @@ const gameBoard = (() => {
         }
     }
 
-
     function _checkCell(event) {
         if (event.target.innerText == "") {
             return true;
@@ -28,7 +27,6 @@ const gameBoard = (() => {
             return false;
         }
     }
-
 
     function _checkWinX() {
 
@@ -106,26 +104,31 @@ const gameBoard = (() => {
 
     function _checkWin() {
         if (_checkWinO() || _checkWinX()) {
-            console.log(`Congrats Player ${currentPlayer}!! You Win!!`)
+            displayController.winScreen(currentPlayer);
             gameOver = true;
         }
         
         
     }
+
     function _placeText(event){
         const divIndex = event.target.id;
+
         if (currentPlayer === 0) {
             _styleOutput(event);
             xoPos[divIndex] = 'x'; 
             _checkWin();
             currentPlayer = 1;
+            playerLable.innerText = `Current Player: ${players[currentPlayer].getName()}`;
             return "X"
         }
+
         else{
             _styleOutput(event);
             xoPos[divIndex] = 'o';
             _checkWin();
             currentPlayer = 0;
+            playerLable.innerText = `Current Player: ${players[currentPlayer].getName()}`;;
             return "O"
         }
     }
@@ -140,7 +143,20 @@ const gameBoard = (() => {
     }
 
     function initializeGame(){
-        displayController.createGameDivs();
+        const winScreen = document.getElementById("winnerText")
+        winScreen.innerText = "";
+        gameOver = false;
+        currentPlayer = 0;
+        xoPos = [
+            {'0': null}, {'1': null}, {'2': null},
+            {'3': null}, {'4': null}, {'5': null},
+            {'6': null}, {'7': null}, {'8': null}
+        ]
+        console.log(xoPos);
+        displayController.createGame();
+        displayController.assignNames(); 
+        playerLable.innerText = `Current Player: ${players[currentPlayer].getName()}`;
+
     }
 
     return {
@@ -154,12 +170,9 @@ const gameBoard = (() => {
 
 const displayController = (() => {
     //Functions here
-    const displayScore = () => console.log(Player.getScore);
-
-
 
     //All processes related to updating the gameboard
-    function createGameDivs(){
+    function createGame(){
         let posCounter = 0;
 
         //Remove old board
@@ -176,26 +189,51 @@ const displayController = (() => {
             document.getElementById('gameBoardContainer').appendChild(newDiv);
             posCounter++;
         }
+        
+    }
+    
+    function winScreen(currentPlayer) {
+        const name = players[currentPlayer].getName();
+        const winScreen = document.getElementById("winnerText")
+        winScreen.innerText = `${name}YOU WIN!!!`;
+    }
+
+    function assignNames() {
+        players = [];
+        const playerOneName = document.getElementById('player1Name').value;
+        const playerTwoName = document.getElementById('player2Name').value;
+        if (playerOneName) {
+            playerOne = Player(playerOneName, 0);
+        }
+        else{
+            playerOne = Player("Player 1", 0);
+        }
+
+        if (playerTwoName) {
+            playerTwo = Player(playerTwoName, 1);
+        }
+        else{
+            playerTwo = Player("Player 2", 1);
+        }
+        console.log(playerOne.getName())
+        console.log(playerTwo.getName())
+        players.push(playerOne);
+        players.push(playerTwo);
+        
     }
 
 return {
         //Public functions here;
-        createGameDivs
+        winScreen,
+        assignNames,
+        createGame
 }
 })();
 
-
-const Player = (playerName, playerNum, score, text) => {
+let players = []
+const Player = (playerName, playerNum) => {
     const getName = () => playerName;
     const getNum = () => playerNum
-    const getScore = () => score;
-    const getText = () => text;
-
-    return {getName, getScore}
+    return {getName, getNum}
 }
-
-const player1 = Player('Matthew', 0, 0, "X");
-const player2 = Player('Cameron', 1, 0, "O");
-
-gameBoard.initializeGame();
-
+document.getElementById("newGame").addEventListener('click', gameBoard.initializeGame);
