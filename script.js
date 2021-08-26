@@ -1,7 +1,12 @@
 const gameBoard = (() => {
     //Functions here
-    let xoPos = [];
+    let xoPos = [
+        {'0': null}, {'1': null}, {'2': null},
+        {'3': null}, {'4': null}, {'5': null},
+        {'6': null}, {'7': null}, {'8': null}
+];
     let currentPlayer = 0;
+    let gameOver = false;
 
 
     //Changes the style of the text depending on if it is an X or O
@@ -25,31 +30,112 @@ const gameBoard = (() => {
     }
 
 
-    function _checkWin() {
-        console.log("hi");
+    function _checkWinX() {
+
+        //Check Rows
+        if (xoPos['0'] + xoPos[1] + xoPos[2] == 'xxx') {
+            return true;
+        }
+        else if (xoPos[3] + xoPos[4] + xoPos[5] == 'xxx') {
+            return true;
+        }
+
+        else if (xoPos[6] + xoPos[7] + xoPos[8] == 'xxx') {
+            return true;
+        }
+
+        //Check Columns
+        if (xoPos[0] + xoPos[3] + xoPos[6] == 'xxx' ) {
+            return true;
+        }
+
+        else if (xoPos[1] + xoPos[4] + xoPos[7] == 'xxx' ) {
+            return true;
+        }
+
+        else if (xoPos[2] + xoPos[5] + xoPos[8] == 'xxx' ) {
+            return true;
+        }
+
+        //Check Diagonals
+        if (xoPos[0] + xoPos[4] + xoPos[8] == 'xxx' ) {
+            return true;
+        }
+        else if (xoPos[2] + xoPos[4] + xoPos[6] == 'xxx' ) {
+            return true;
+        }
+
     }
     
+    function _checkWinO() {
+
+        //Check Rows
+        if (xoPos['0'] + xoPos[1] + xoPos[2] == 'ooo') {
+            return true;
+        }
+        else if (xoPos[3] + xoPos[4] + xoPos[5] == 'ooo') {
+            return true;
+        }
+
+        else if (xoPos[6] + xoPos[7] + xoPos[8] == 'ooo') {
+            return true;
+        }
+
+        //Check Columns
+        if (xoPos[0] + xoPos[3] + xoPos[6] == 'ooo' ) {
+            return true;
+        }
+
+        else if (xoPos[1] + xoPos[4] + xoPos[7] == 'ooo' ) {
+            return true;
+        }
+
+        else if (xoPos[2] + xoPos[5] + xoPos[8] == 'ooo' ) {
+            return true;
+        }
+
+        //Check Diagonals
+        if (xoPos[0] + xoPos[4] + xoPos[8] == 'ooo' ) {
+            return true;
+        }
+        else if (xoPos[2] + xoPos[4] + xoPos[6] == 'ooo' ) {
+            return true;
+        }
+
+    }
+
+    function _checkWin() {
+        if (_checkWinO() || _checkWinX()) {
+            console.log(`Congrats Player ${currentPlayer}!! You Win!!`)
+            gameOver = true;
+        }
+        
+        
+    }
     function _placeText(event){
+        const divIndex = event.target.id;
         if (currentPlayer === 0) {
             _styleOutput(event);
-            xoPos.push("X");
+            xoPos[divIndex] = 'x'; 
+            _checkWin();
             currentPlayer = 1;
             return "X"
         }
         else{
             _styleOutput(event);
-            xoPos.push("O");
+            xoPos[divIndex] = 'o';
+            _checkWin();
             currentPlayer = 0;
             return "O"
         }
     }
 
     function playerClickLogic(event){
-        if (_checkCell(event)) {
+        if (_checkCell(event) && !gameOver) {
             event.target.innerText = _placeText(event);
         }
         else{
-            alert("INVALID POSITION!");
+            alert("SORRY CANT DO THAT!");
         }
     }
 
