@@ -26,7 +26,7 @@ const gameBoard = (() => {
 
 
     function _checkWin() {
-        
+        console.log("hi");
     }
     
     function _placeText(event){
